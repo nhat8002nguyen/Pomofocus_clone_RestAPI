@@ -1,4 +1,4 @@
-package com.nathan.pet.PomofocusClone.config;
+package com.nathan.pet.PomofocusClone;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,18 +1,28 @@
 package com.nathan.pet.PomofocusClone.api.models;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
+import javax.persistence.*;
 import java.util.Objects;
 
 
 @Entity
+@Table(name="user")
 public class User {
-  private @Id @GeneratedValue Long id;
+  @Column(name = "id")
+  private @Id @GeneratedValue(strategy = GenerationType.AUTO) Long id;
+
+  @Column(name = "name")
   private String name;
+
+  @Column(name = "gmail")
   private String gmail;
+
+  @Column(name = "password")
   private String password;
+
+  @Column(name = "created_at")
   private String createdAt;
+
+  @Column(name = "updated_at")
   private String updatedAt;
 
   public User() {}
@@ -44,6 +54,10 @@ public class User {
 
   public void setUpdatedAt(String updatedAt) {
     this.updatedAt = updatedAt;
+  }
+
+  public void setCreatedAt(String createdAt) {
+    this.createdAt = createdAt;
   }
 
   public Long getId() {
