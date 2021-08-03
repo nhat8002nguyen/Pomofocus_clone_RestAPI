@@ -12,13 +12,13 @@ public class AlarmSound {
   private String updatedAt;
   private String name;
 
+  public AlarmSound() {}
+
   public AlarmSound(String createdAt, String updatedAt, String name) {
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
     this.name = name;
   }
-
-
 
   public Long getId() {
     return id;

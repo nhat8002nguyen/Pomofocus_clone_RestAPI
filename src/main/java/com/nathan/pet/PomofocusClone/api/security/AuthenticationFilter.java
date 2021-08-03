@@ -3,6 +3,7 @@ package com.nathan.pet.PomofocusClone.api.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nathan.pet.PomofocusClone.api.models.User;
+import com.nathan.pet.PomofocusClone.api.repositories.UserRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -44,12 +45,15 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
   protected void successfulAuthentication(
       HttpServletRequest request, HttpServletResponse response, FilterChain filterChain, Authentication authentication)
-  {
+        throws IOException {
     String token = Jwts.builder()
         .setSubject(((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername())
         .setExpiration(new Date(System.currentTimeMillis() + 864_000_000))
         .signWith(SignatureAlgorithm.HS512, "SecretKeyToGenJWTs".getBytes())
         .compact();
-    response.addHeader("Authorization","Bearer " + token);
+//    response.addHeader("Authorization","Bearer " + token);
+    response.setContentType("text/plan");
+    response.setCharacterEncoding("UTF-8");
+    response.getWriter().write("Bearer " + token);
   }
 }
