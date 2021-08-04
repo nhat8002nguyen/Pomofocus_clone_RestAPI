@@ -28,7 +28,7 @@ public class User {
   @NotBlank(message = "password is mandatory")
   private String password;
 
-  @OneToOne
+  @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "setting_id")
   @RestResource(path="userSetting", rel="setting")
   private Setting setting;

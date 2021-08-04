@@ -6,6 +6,7 @@ import com.nathan.pet.PomofocusClone.api.helpers.ErrorMessage;
 import com.nathan.pet.PomofocusClone.api.helpers.ISODate;
 import com.nathan.pet.PomofocusClone.api.models.Setting;
 import com.nathan.pet.PomofocusClone.api.models.User;
+import com.nathan.pet.PomofocusClone.api.repositories.SettingRepository;
 import com.nathan.pet.PomofocusClone.api.repositories.UserRepository;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +27,14 @@ import java.util.Map;
 @RestController
 public class UserController {
   private final UserRepository repository;
+  private final SettingRepository settingRepository;
   @Autowired
   private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-  public UserController(UserRepository repository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+  public UserController(UserRepository repository, BCryptPasswordEncoder bCryptPasswordEncoder,
+    SettingRepository settingRepository) {
     this.repository = repository;
+    this.settingRepository = settingRepository;
     this.bCryptPasswordEncoder = bCryptPasswordEncoder;
   }
 
@@ -46,8 +50,13 @@ public class UserController {
 
     user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
+    // create setting and assign association
+    Setting setting = new Setting();
+    setting.setUser(user);
+    user.setSetting(setting);
+
     repository.save(user);
-    return ResponseEntity.status(201).body(user);
+    return ResponseEntity.status(201).body(new JSONObject(Map.of("message", "Register successfully !")));
   }
 
   @ResponseStatus(HttpStatus.BAD_REQUEST)
