@@ -1,33 +1,57 @@
 package com.nathan.pet.PomofocusClone.api.models;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.rest.core.annotation.RestResource;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+import java.util.Date;
 import java.util.Objects;
 
 
 @Entity
 @Table(name="user")
 public class User {
-  @Column(name = "id")
   private @Id @GeneratedValue(strategy = GenerationType.AUTO) Long id;
 
-  @Column(name = "name")
+  @NotBlank(message = "name is mandatory")
+  @Size(min = 4, max = 255)
   private String name;
 
-  @Column(name = "gmail")
+  @NotBlank(message = "email is mandatory")
+  @Size(min = 4, max = 255)
   private String gmail;
 
-  @Column(name = "password")
+  @Size(min = 4, max = 255)
+  @NotBlank(message = "password is mandatory")
   private String password;
 
-  @Column(name = "created_at")
-  private String createdAt;
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "setting_id")
+  @RestResource(path="userSetting", rel="setting")
+  private Setting setting;
 
-  @Column(name = "updated_at")
-  private String updatedAt;
+  @CreationTimestamp
+  @Column(updatable = false, nullable = false)
+  private Date createdAt;
+
+  @UpdateTimestamp
+  @Column(nullable = false)
+  private Date updatedAt;
+
+  public void setSetting(Setting setting) {
+    this.setting = setting;
+  }
+
+  public Setting getSetting() {
+    return setting;
+  }
 
   public User() {}
 
-  public User(String createdAt, String updatedAt, String name, String gmail, String password) {
+  public User(Date createdAt, Date updatedAt, String name, String gmail, String password) {
     this.createdAt= createdAt;
     this.updatedAt = updatedAt;
     this.name = name;
@@ -52,11 +76,11 @@ public class User {
     this.password = password;
   }
 
-  public void setUpdatedAt(String updatedAt) {
+  public void setUpdatedAt(Date updatedAt) {
     this.updatedAt = updatedAt;
   }
 
-  public void setCreatedAt(String createdAt) {
+  public void setCreatedAt(Date createdAt) {
     this.createdAt = createdAt;
   }
 
@@ -76,11 +100,11 @@ public class User {
     return password;
   }
 
-  public String getCreatedAt() {
+  public Date getCreatedAt() {
     return createdAt;
   }
 
-  public String getUpdatedAt() {
+  public Date getUpdatedAt() {
     return updatedAt;
   }
 

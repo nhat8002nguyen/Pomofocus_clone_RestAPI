@@ -1,82 +1,74 @@
 package com.nathan.pet.PomofocusClone.api.controllers;
 
-import com.nathan.pet.PomofocusClone.api.assemblers.UserModelAssembler;
+import com.nathan.pet.PomofocusClone.api.exceptions.SettingNotFoundException;
 import com.nathan.pet.PomofocusClone.api.exceptions.UserNotFoundException;
+import com.nathan.pet.PomofocusClone.api.helpers.ErrorMessage;
+import com.nathan.pet.PomofocusClone.api.helpers.ISODate;
+import com.nathan.pet.PomofocusClone.api.models.Setting;
 import com.nathan.pet.PomofocusClone.api.models.User;
+import com.nathan.pet.PomofocusClone.api.repositories.SettingRepository;
 import com.nathan.pet.PomofocusClone.api.repositories.UserRepository;
+import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
-import java.util.stream.Collectors;
 
-@RequestMapping("/api")
 @RestController
 public class UserController {
   private final UserRepository repository;
-  private final UserModelAssembler assembler;
+  private final SettingRepository settingRepository;
   @Autowired
   private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-  public UserController(UserRepository repository, UserModelAssembler assembler,
-                        BCryptPasswordEncoder bCryptPasswordEncoder) {
+  public UserController(UserRepository repository, BCryptPasswordEncoder bCryptPasswordEncoder,
+    SettingRepository settingRepository) {
     this.repository = repository;
-    this.assembler = assembler;
+    this.settingRepository = settingRepository;
     this.bCryptPasswordEncoder = bCryptPasswordEncoder;
   }
 
-  @GetMapping("/users")
-  public CollectionModel<EntityModel<User>> all() {
-    List<EntityModel<User>> userModels  = repository.findAll().stream()
-        .map(assembler::toModel)
-        .collect(Collectors.toList());
+  @PostMapping("/register")
+  public ResponseEntity<?> register(@Valid @RequestBody User user) {
+    User checkingUser = repository.findByUsername(user.getName());
+    if (checkingUser != null) return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        .body(ErrorMessage.create("message", "User name is already exist"));
 
-    return CollectionModel.of(userModels,
-        linkTo(methodOn(UserController.class).all()).withSelfRel());
-  }
+    checkingUser = repository.findByGmail(user.getGmail());
+    if (checkingUser != null) return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        .body(ErrorMessage.create("message", "Gmail is already exist"));
 
-  @GetMapping("/users/{id}")
-  public EntityModel<User> one(@PathVariable Long id) {
-    User user = repository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+    user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
-    return assembler.toModel(user);
-  }
-
-  @DeleteMapping("/users/{id}")
-  public ResponseEntity<EntityModel<User>> delete(@PathVariable Long id) {
-    repository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
-    repository.deleteById(id);
-    return ResponseEntity.noContent().build();
-  }
-
-  @PostMapping("/user/register")
-  public ResponseEntity<?> register(@RequestParam String email, @RequestParam String username,
-                                                    @RequestParam String password) {
-    User user = new User();
-    user.setPassword(bCryptPasswordEncoder.encode(password));
-    user.setGmail(email);
-    user.setName(username);
-
-    // create date time
-    TimeZone tz = TimeZone.getTimeZone("UTC");
-    DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
-    df.setTimeZone(tz);
-    String nowAsISO = df.format(new Date());
-    user.setCreatedAt(nowAsISO);
-    user.setUpdatedAt(nowAsISO);
+    // create setting and assign association
+    Setting setting = new Setting();
+    setting.setUser(user);
+    user.setSetting(setting);
 
     repository.save(user);
-    return ResponseEntity.status(201).body(user);
+    return ResponseEntity.status(201).body(new JSONObject(Map.of("message", "Register successfully !")));
   }
+
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public Map<String, String> handleValidationException(MethodArgumentNotValidException ex) {
+    Map<String, String> errors = new HashMap<>();
+    ex.getBindingResult().getAllErrors().forEach(error -> {
+      String fieldName = ((FieldError) error).getField();
+      String errorMessage = error.getDefaultMessage();
+      errors.put(fieldName, errorMessage);
+    });
+    return errors;
+  }
+
 }
