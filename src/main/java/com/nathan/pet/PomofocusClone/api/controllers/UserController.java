@@ -55,6 +55,7 @@ public class UserController {
     setting.setUser(user);
     user.setSetting(setting);
 
+    // add CascadeType.ALL to User model to save setting when flush user
     repository.save(user);
     return ResponseEntity.status(201).body(new JSONObject(Map.of("message", "Register successfully !")));
   }
@@ -71,4 +72,12 @@ public class UserController {
     return errors;
   }
 
+  @GetMapping("/user")
+  public ResponseEntity<?> getUserId(@RequestParam String name) {
+    User user = repository.findByUsername(name);
+    if (user == null) return ResponseEntity.badRequest()
+        .body(new JSONObject(Map.of("message", "User not found !")));
+
+    return ResponseEntity.ok(new JSONObject(Map.of("id", user.getId())));
+  }
 }
