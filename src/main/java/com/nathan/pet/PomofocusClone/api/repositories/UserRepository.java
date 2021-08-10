@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.util.List;
 
 @RepositoryRestResource(collectionResourceRel = "users", path = "users")
-@CrossOrigin
 public interface UserRepository extends JpaRepository<User, Long> {
   @Query(value = "SELECT * FROM user u WHERE u.name = :username limit 1", nativeQuery = true)
   User findByUsername(@Param("username") String username);

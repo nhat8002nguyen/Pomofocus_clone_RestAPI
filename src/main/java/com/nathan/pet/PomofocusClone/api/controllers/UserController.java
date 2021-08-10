@@ -25,7 +25,6 @@ import java.util.Map;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
   private final UserRepository repository;
   private final SettingRepository settingRepository;

@@ -7,6 +7,5 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @RepositoryRestResource(collectionResourceRel = "settings", path = "settings")
-@CrossOrigin(origins = "*")
 public interface SettingRepository extends JpaRepository<Setting, Long> {
 }
