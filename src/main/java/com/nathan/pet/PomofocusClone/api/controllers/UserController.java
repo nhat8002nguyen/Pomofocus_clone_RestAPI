@@ -80,4 +80,19 @@ public class UserController {
 
     return ResponseEntity.ok(new JSONObject(Map.of("id", user.getId())));
   }
+
+  @PostMapping("/resetSetting/{id}")
+  public ResponseEntity<?> reset(@PathVariable Long id) {
+    User user = repository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+    Setting oldSetting = user.getSetting();
+
+    Setting setting = new Setting();
+    setting.setUser(user);
+    user.setSetting(setting);
+    settingRepository.deleteById(oldSetting.getId());
+
+    repository.save(user);
+    return ResponseEntity.ok(setting);
+  }
+
 }
