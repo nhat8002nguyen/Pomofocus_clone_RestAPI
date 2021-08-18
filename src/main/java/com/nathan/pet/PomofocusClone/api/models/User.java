@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -32,6 +33,12 @@ public class User {
   @JoinColumn(name = "setting_id")
   @RestResource(path="userSetting", rel="setting")
   private Setting setting;
+
+  @OneToMany(mappedBy = "user")
+  private List<Task> tasks;
+
+  @OneToMany(mappedBy = "user")
+  private List<Template> templates;
 
   @CreationTimestamp
   @Column(updatable = false, nullable = false)
