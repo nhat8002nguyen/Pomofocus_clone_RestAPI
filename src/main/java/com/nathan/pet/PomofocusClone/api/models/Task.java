@@ -34,7 +34,7 @@ public class Task {
   @NotNull
   @Min(value = 0)
   @Max(value = 100)
-  private int donePomo;
+  private int donePomo = 0;
 
   @NotNull
   @Min(value = 0)
@@ -42,13 +42,13 @@ public class Task {
   private int totalPomo;
 
   @NotNull
-  private boolean done;
+  private boolean done = false;
 
-  @ManyToOne
+  @ManyToOne(cascade = CascadeType.PERSIST)
   @JoinColumn(name = "user_id")
   private User user;
 
-  @ManyToOne
+  @ManyToOne(cascade = CascadeType.PERSIST)
   @JoinColumn(name = "template_id")
   private Template template;
 
@@ -64,8 +64,34 @@ public class Task {
     this.done = done;
   }
 
+  public Task(Task task) {
+    this.createdAt = task.getCreatedAt();
+    this.updatedAt = task.getUpdatedAt();
+    this.title = task.getTitle();
+    this.note = task.getNote();
+    this.donePomo = task.getDonePomo();
+    this.totalPomo = task.getTotalPomo();
+    task.done = task.isDone();
+  }
+
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public User getUser() {
+    return user;
+  }
+
+  public Template getTemplate() {
+    return template;
+  }
+
+  public void setUser(User user) {
+    this.user = user;
+  }
+
+  public void setTemplate(Template template) {
+    this.template = template;
   }
 
   public void setCreatedAt(Date createdAt) {

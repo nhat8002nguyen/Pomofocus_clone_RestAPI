@@ -28,7 +28,7 @@ public class Template {
   @Size(min = 1, max = 1000)
   private String name;
 
-  @ManyToOne
+  @ManyToOne(cascade = CascadeType.PERSIST)
   @JoinColumn(name = "user_id")
   private User user;
 
@@ -41,6 +41,22 @@ public class Template {
     this.createAt = createAt;
     this.updatedAt = updatedAt;
     this.name = name;
+  }
+
+  public void setUser(User user) {
+    this.user = user;
+  }
+
+  public void setTasks(List<Task> tasks) {
+    this.tasks = tasks;
+  }
+
+  public User getUser() {
+    return user;
+  }
+
+  public List<Task> getTasks() {
+    return tasks;
   }
 
   public Long getId() {

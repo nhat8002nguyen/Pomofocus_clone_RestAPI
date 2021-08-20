@@ -1,7 +1,5 @@
 com\nathan\pet\PomofocusClone\api\repositories\UserRepository.class
 com\nathan\pet\PomofocusClone\api\helpers\ISODate.class
-com\nathan\pet\PomofocusClone\api\repositories\AlarmSoundRepository.class
-com\nathan\pet\PomofocusClone\api\models\AlarmSound.class
 com\nathan\pet\PomofocusClone\api\services\SettingService.class
 com\nathan\pet\PomofocusClone\api\security\AuthenticationFilter.class
 com\nathan\pet\PomofocusClone\api\repositories\SettingRepository.class

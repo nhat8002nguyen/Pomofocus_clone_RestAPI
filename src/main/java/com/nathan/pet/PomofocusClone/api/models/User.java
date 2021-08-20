@@ -67,6 +67,22 @@ public class User {
     this.createdAt = createdAt;
   }
 
+  public void setTasks(List<Task> tasks) {
+    this.tasks = tasks;
+  }
+
+  public void setTemplates(List<Template> templates) {
+    this.templates = templates;
+  }
+
+  public List<Task> getTasks() {
+    return tasks;
+  }
+
+  public List<Template> getTemplates() {
+    return templates;
+  }
+
   public void setId(Long id) {
     this.id = id;
   }
