@@ -3,15 +3,15 @@ com\nathan\pet\PomofocusClone\api\helpers\ISODate.class
 com\nathan\pet\PomofocusClone\api\services\SettingService.class
 com\nathan\pet\PomofocusClone\api\security\AuthenticationFilter.class
 com\nathan\pet\PomofocusClone\api\repositories\SettingRepository.class
+com\nathan\pet\PomofocusClone\api\controllers\UserController.class
+com\nathan\pet\PomofocusClone\api\models\Setting.class
 com\nathan\pet\PomofocusClone\api\security\AuthorizationFilter.class
 com\nathan\pet\PomofocusClone\api\constants\defaultSetting.class
 com\nathan\pet\PomofocusClone\api\exceptions\UserNotFoundException.class
-com\nathan\pet\PomofocusClone\api\controllers\UserController.class
 com\nathan\pet\PomofocusClone\api\models\User.class
 com\nathan\pet\PomofocusClone\PomofocusCloneApplication.class
 com\nathan\pet\PomofocusClone\api\security\WebSecurityConfiguration.class
 com\nathan\pet\PomofocusClone\api\security\UserDetailsServiceImpl.class
 com\nathan\pet\PomofocusClone\api\helpers\ErrorMessage.class
 com\nathan\pet\PomofocusClone\api\services\UserService.class
-com\nathan\pet\PomofocusClone\api\models\Setting.class
 com\nathan\pet\PomofocusClone\api\exceptions\SettingNotFoundException.class

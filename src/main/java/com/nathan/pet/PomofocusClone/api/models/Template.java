@@ -32,14 +32,12 @@ public class Template {
   @JoinColumn(name = "user_id")
   private User user;
 
-  @OneToMany(mappedBy = "template")
+  @OneToMany(mappedBy = "template", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
   private List<Task> tasks;
 
   public Template() {}
 
-  public Template(Date createAt, Date updatedAt, String name) {
-    this.createAt = createAt;
-    this.updatedAt = updatedAt;
+  public Template(String name) {
     this.name = name;
   }
 

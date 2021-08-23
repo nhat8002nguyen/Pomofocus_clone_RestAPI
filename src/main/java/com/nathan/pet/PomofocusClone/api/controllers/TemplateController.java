@@ -7,20 +7,21 @@ import com.nathan.pet.PomofocusClone.api.models.User;
 import com.nathan.pet.PomofocusClone.api.repositories.TaskRepository;
 import com.nathan.pet.PomofocusClone.api.repositories.TemplateRepository;
 import com.nathan.pet.PomofocusClone.api.repositories.UserRepository;
-import org.apache.juli.logging.LogFactory;
+import net.minidev.json.JSONObject;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.apache.commons.logging.Log;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @RestController
 public class TemplateController {
-  private TemplateRepository repository;
-  private UserRepository userRepository;
-  private TaskRepository taskRepository;
+  private final TemplateRepository repository;
+  private final UserRepository userRepository;
+  private final TaskRepository taskRepository;
+  private final Log log = LogFactory.getLog(this.getClass().getName());
 
   public TemplateController(TemplateRepository repository, UserRepository userRepository, TaskRepository taskRepository) {
     this.repository = repository;
@@ -29,7 +30,7 @@ public class TemplateController {
   }
 
   @PostMapping("/add-template")
-  public ResponseEntity<?> createTemplate(@RequestParam String name,@Valid @RequestBody Template template) {
+  public ResponseEntity<?> createTemplate(@RequestParam String name, @Valid @RequestBody Template template) {
     User user = userRepository.findByUsername(name);
     if (user == null) return ResponseEntity.badRequest().build();
     List<Template> templateList = user.getTemplates();
@@ -41,7 +42,6 @@ public class TemplateController {
     taskList.forEach((task) -> {
       Task copyTask = new Task(task);
       copyTask.setTemplate(template);
-      taskRepository.save(copyTask);
       newTasks.add(copyTask);
     });
     template.setTasks(newTasks);
@@ -53,11 +53,28 @@ public class TemplateController {
   @DeleteMapping("/templateList/remove")
   public ResponseEntity<?> removeTemplate(@RequestParam Long id) {
     Template template = repository.findById(id).orElseThrow(() -> new TemplateNotFoundException(id));
-    List<Task> tasks = template.getTasks();
-    tasks.forEach((item) -> {
-      taskRepository.delete(item);
-    });
     repository.delete(template);
     return ResponseEntity.noContent().build();
+  }
+
+  @PostMapping("/append-template/{id}")
+  public ResponseEntity<?> appendTemplate(@PathVariable Long id) {
+    Template template = repository.findById(id).orElseThrow(() -> new TemplateNotFoundException(id));
+    User user = template.getUser();
+    List<Task> templateTaskList = template.getTasks();
+
+    templateTaskList.forEach(task -> {
+      addTaskToUser(user, task);
+    });
+
+    return ResponseEntity.ok(new JSONObject(Map.of("message", "Append template success")));
+  }
+
+  private void addTaskToUser(User user, Task task) {
+    Task copiedTask = new Task(task);
+    copiedTask.setUser(user);
+    List<Task> userTaskList = user.getTasks();
+    userTaskList.add(copiedTask);
+    taskRepository.save(copiedTask);
   }
 }

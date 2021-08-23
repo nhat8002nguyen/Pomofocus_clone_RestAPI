@@ -3,7 +3,7 @@ package com.nathan.pet.PomofocusClone.api.models;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.rest.core.annotation.RestResource;
+import java.util.UUID;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -13,8 +13,8 @@ import java.util.Objects;
 @Entity
 @Table(name = "task")
 public class Task {
-  @Id @GeneratedValue
-  private Long id;
+  @Id @NotBlank
+  private String id;
 
   @CreationTimestamp
   @Column(updatable = false, nullable = false)
@@ -26,7 +26,7 @@ public class Task {
 
   @NotBlank
   @Size(max = 1000, min = 1)
-  private String title;
+  private String title = "";
 
   @Size(max = 1000)
   private String note;
@@ -52,7 +52,8 @@ public class Task {
   @JoinColumn(name = "template_id")
   private Template template;
 
-  public Task() {}
+  public Task() {
+  }
 
   public Task(Date createdAt, Date updatedAt, String title, String note, int donePomo, int totalPomo, boolean done) {
     this.createdAt = createdAt;
@@ -65,16 +66,15 @@ public class Task {
   }
 
   public Task(Task task) {
-    this.createdAt = task.getCreatedAt();
-    this.updatedAt = task.getUpdatedAt();
+    this.id = UUID.randomUUID().toString();
     this.title = task.getTitle();
     this.note = task.getNote();
-    this.donePomo = task.getDonePomo();
+    this.donePomo = 0;
     this.totalPomo = task.getTotalPomo();
-    task.done = task.isDone();
+    this.done = false;
   }
 
-  public void setId(Long id) {
+  public void setId(String id) {
     this.id = id;
   }
 
@@ -122,7 +122,7 @@ public class Task {
     this.done = done;
   }
 
-  public Long getId() {
+  public String getId() {
     return id;
   }
 
@@ -159,7 +159,9 @@ public class Task {
     if (this == o) return true;
     if (!(o instanceof Task)) return false;
     Task task = (Task) o;
-    return donePomo == task.donePomo && totalPomo == task.totalPomo && done == task.done && id.equals(task.id) && createdAt.equals(task.createdAt) && Objects.equals(updatedAt, task.updatedAt) && title.equals(task.title) && Objects.equals(note, task.note);
+    return donePomo == task.donePomo && totalPomo == task.totalPomo && done == task.done && id.equals(task.id)
+        && createdAt.equals(task.createdAt) && Objects.equals(updatedAt, task.updatedAt) && title.equals(task.title)
+        && Objects.equals(note, task.note);
   }
 
   @Override

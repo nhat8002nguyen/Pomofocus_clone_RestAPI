@@ -12,10 +12,13 @@ C:\Users\aomin\Project\spring\PomofocusClone\PomofocusClone\src\main\java\com\na
 C:\Users\aomin\Project\spring\PomofocusClone\PomofocusClone\src\main\java\com\nathan\pet\PomofocusClone\api\security\UserDetailsServiceImpl.java
 C:\Users\aomin\Project\spring\PomofocusClone\PomofocusClone\src\main\java\com\nathan\pet\PomofocusClone\api\models\Task.java
 C:\Users\aomin\Project\spring\PomofocusClone\PomofocusClone\src\main\java\com\nathan\pet\PomofocusClone\api\services\SettingService.java
+C:\Users\aomin\Project\spring\PomofocusClone\PomofocusClone\src\main\java\com\nathan\pet\PomofocusClone\api\controllers\TemplateController.java
 C:\Users\aomin\Project\spring\PomofocusClone\PomofocusClone\src\main\java\com\nathan\pet\PomofocusClone\api\helpers\ErrorMessage.java
 C:\Users\aomin\Project\spring\PomofocusClone\PomofocusClone\src\main\java\com\nathan\pet\PomofocusClone\api\exceptions\SettingNotFoundException.java
 C:\Users\aomin\Project\spring\PomofocusClone\PomofocusClone\src\main\java\com\nathan\pet\PomofocusClone\api\models\User.java
 C:\Users\aomin\Project\spring\PomofocusClone\PomofocusClone\src\main\java\com\nathan\pet\PomofocusClone\api\models\Setting.java
 C:\Users\aomin\Project\spring\PomofocusClone\PomofocusClone\src\main\java\com\nathan\pet\PomofocusClone\api\services\UserService.java
+C:\Users\aomin\Project\spring\PomofocusClone\PomofocusClone\src\main\java\com\nathan\pet\PomofocusClone\api\exceptions\TemplateNotFoundException.java
+C:\Users\aomin\Project\spring\PomofocusClone\PomofocusClone\src\main\java\com\nathan\pet\PomofocusClone\api\controllers\TaskController.java
 C:\Users\aomin\Project\spring\PomofocusClone\PomofocusClone\src\main\java\com\nathan\pet\PomofocusClone\api\security\WebSecurityConfiguration.java
 C:\Users\aomin\Project\spring\PomofocusClone\PomofocusClone\src\main\java\com\nathan\pet\PomofocusClone\PomofocusCloneApplication.java
