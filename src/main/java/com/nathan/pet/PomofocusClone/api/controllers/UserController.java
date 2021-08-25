@@ -5,6 +5,8 @@ import com.nathan.pet.PomofocusClone.api.exceptions.UserNotFoundException;
 import com.nathan.pet.PomofocusClone.api.helpers.ErrorMessage;
 import com.nathan.pet.PomofocusClone.api.helpers.ISODate;
 import com.nathan.pet.PomofocusClone.api.models.Setting;
+import com.nathan.pet.PomofocusClone.api.models.Task;
+import com.nathan.pet.PomofocusClone.api.models.Template;
 import com.nathan.pet.PomofocusClone.api.models.User;
 import com.nathan.pet.PomofocusClone.api.repositories.SettingRepository;
 import com.nathan.pet.PomofocusClone.api.repositories.UserRepository;
@@ -20,7 +22,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -54,6 +58,12 @@ public class UserController {
     Setting setting = new Setting();
     setting.setUser(user);
     user.setSetting(setting);
+
+    List<Task> taskList = new ArrayList<>();
+    user.setTasks(taskList);
+
+    List<Template> templateList = new ArrayList<>();
+    user.setTemplates(templateList);
 
     // add CascadeType.ALL to User model to save setting when flush user
     repository.save(user);
@@ -94,5 +104,6 @@ public class UserController {
     repository.save(user);
     return ResponseEntity.ok(setting);
   }
+
 
 }

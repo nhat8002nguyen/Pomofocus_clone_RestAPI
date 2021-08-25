@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -32,6 +33,12 @@ public class User {
   @JoinColumn(name = "setting_id")
   @RestResource(path="userSetting", rel="setting")
   private Setting setting;
+
+  @OneToMany(mappedBy = "user")
+  private List<Task> tasks;
+
+  @OneToMany(mappedBy = "user")
+  private List<Template> templates;
 
   @CreationTimestamp
   @Column(updatable = false, nullable = false)
@@ -58,6 +65,22 @@ public class User {
     this.gmail = gmail;
     this.password = password;
     this.createdAt = createdAt;
+  }
+
+  public void setTasks(List<Task> tasks) {
+    this.tasks = tasks;
+  }
+
+  public void setTemplates(List<Template> templates) {
+    this.templates = templates;
+  }
+
+  public List<Task> getTasks() {
+    return tasks;
+  }
+
+  public List<Template> getTemplates() {
+    return templates;
   }
 
   public void setId(Long id) {
